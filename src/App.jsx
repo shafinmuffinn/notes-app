@@ -58,6 +58,7 @@ function App() {
         <Auth
           supabaseClient={supabase}
           appearance={{ theme: ThemeSupa }}
+          providers={[]}
         />
       </div>
     );
