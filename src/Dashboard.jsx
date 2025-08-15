@@ -10,12 +10,13 @@ export default function Dashboard() {
   };
   // Function to navigate to Book Vehicle page
   const handleBookVehicle = () => {
-    navigate("/book-vehicle");
+    alert("Move option is under construction.");
+    //navigate("/book-vehicle");
   };
 
   // Future handlers for "Make a Delivery" and "Move"
   const handleMakeDelivery = () => {
-    alert("Make a Delivery option is under construction.");
+    navigate("/make-delivery");
   };
 
   const handleMove = () => {

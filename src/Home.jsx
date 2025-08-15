@@ -1,7 +1,5 @@
 // src/Home.jsx
 import { Link } from "react-router-dom";
-import React from "react";
-//import "box" from "./home.css";
 import './home.css'
 
 export default function Home() {
