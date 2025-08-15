@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { supabase } from "./Login"; // Use the initialized Supabase client
 import { Link } from "react-router-dom";
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export default function MakeDelivery() {
   const [deliveryType, setDeliveryType] = useState("regular");
@@ -17,6 +18,7 @@ export default function MakeDelivery() {
   const [parcelDescription, setParcelDescription] = useState("");
   const [cost, setCost] = useState(0);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   // Example list of districts (hardcoded for now)
   const districts = [
@@ -86,6 +88,8 @@ export default function MakeDelivery() {
       }
 
       alert("Delivery created successfully!");
+      navigate('/orders')
+
       // Reset form
       setFromAddress(""); setToAddress(""); setDistrictFrom(""); setDistrictTo("");
       setDeliveryDate(""); setDeliveryTime(""); setOccasionType(""); setGiftMessage("");

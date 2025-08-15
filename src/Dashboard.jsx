@@ -4,6 +4,10 @@ import './home.css'
 export default function Dashboard() {
   const navigate = useNavigate(); // React Router's useNavigate for programmatic navigation
   
+  const handleViewOrders = () => {
+    navigate("/orders");
+  };
+
   const handleLogout = async () => {
     await supabase.auth.signOut();  // Log the user out
     navigate("/");  // Redirect to login page after logging out
@@ -26,10 +30,16 @@ export default function Dashboard() {
   return (
     <div style={{ maxWidth: 600, margin: "24px auto", padding: "0 16px" }}>
       <h1>Welcome to Your Dashboard</h1>
+      <button onClick={handleViewOrders} style={{ padding: "10px 20px", fontSize: "16px" }}>
+          My Orders
+        </button>
       <p>Choose one of the options below:</p>
 
       {/* Option Buttons */}
+      
       <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        
+        
         <button onClick={handleBookVehicle} style={{ padding: "10px 20px", fontSize: "16px" }}>
           Book a Vehicle
         </button>
