@@ -7,6 +7,7 @@ import BookVehicle from './BookVehicle'
 import Dashboard from './Dashboard';
 import MakeDelivery from './MakeDelivery'
 import Orders from './Orders';
+import Move from './Move'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -19,6 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/dashboard" element={<Dashboard />} /> 
         <Route path="/make-delivery" element={<MakeDelivery />} /> 
         <Route path="/orders" element={<Orders />} />
+        <Route path="/move" element={<Move />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

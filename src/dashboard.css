@@ -1,0 +1,25 @@
+.dashboard-container {
+  display: flex;
+  justify-content: center; /* centers horizontally */
+  gap: 20px;               /* space between buttons */
+  margin-top: 40px;
+  flex-wrap: wrap;         /* allow wrapping on smaller screens */
+}
+
+.dash-btn {
+  width: 150px;            /* square size */
+  height: 150px;
+  background-color: #1a1a1a;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;     /* remove this if you want *perfect* square */
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.dash-btn:hover {
+  background-color: #333;
+  transform: scale(1.05);
+}
