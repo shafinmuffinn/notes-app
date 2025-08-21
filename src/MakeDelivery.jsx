@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { supabase } from "./Login"; // Use the initialized Supabase client
+import { supabase } from "./Login";
 import { Link } from "react-router-dom";
 import { Navigate, useNavigate } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ export default function MakeDelivery() {
   const [districtFrom, setDistrictFrom] = useState("");
   const [districtTo, setDistrictTo] = useState("");
   const [deliveryDate, setDeliveryDate] = useState("");
-  const [deliveryTime, setDeliveryTime] = useState(""); // for time-sensitive
+  const [deliveryTime, setDeliveryTime] = useState("");
   const [occasionType, setOccasionType] = useState("");
   const [giftMessage, setGiftMessage] = useState("");
   const [wrappingRequired, setWrappingRequired] = useState(false);
@@ -20,16 +20,14 @@ export default function MakeDelivery() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Example list of districts (hardcoded for now)
   const districts = [
     "Dhaka", "Chittagong", "Rajshahi", "Khulna", "Sylhet",
     "Barisal", "Rangpur", "Mymensingh", "Comilla", "Narsingdi"
   ];
 
-  // Dummy cost calculation based on district selection
   const calculateCost = () => {
     if (districtFrom && districtTo) {
-      setCost(districtFrom === districtTo ? 10 : 20); // simple rule
+      setCost(districtFrom === districtTo ? 10 : 20);
     }
   };
 
@@ -42,7 +40,6 @@ export default function MakeDelivery() {
         if (userError) throw userError;
         if (!user) throw new Error("User is not logged in");
 
-      // Insert into deliveries table)
       const { data: deliveryData, error: deliveryError } = await supabase
         .from("deliveries")
         .insert([{
@@ -62,7 +59,6 @@ export default function MakeDelivery() {
 
       const deliveryId = deliveryData.id;
 
-      // Insert into type-specific tables
       if (deliveryType === "time_sensitive") {
         const { error } = await supabase
           .from("time_sensitive_delivery")
@@ -90,7 +86,6 @@ export default function MakeDelivery() {
       alert("Delivery created successfully!");
       navigate('/orders')
 
-      // Reset form
       setFromAddress(""); setToAddress(""); setDistrictFrom(""); setDistrictTo("");
       setDeliveryDate(""); setDeliveryTime(""); setOccasionType(""); setGiftMessage("");
       setWrappingRequired(false); setCustomNote(""); setParcelDescription(""); setCost(0);

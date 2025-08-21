@@ -12,12 +12,31 @@ export default function Orders() {
     try {
       const userId = (await supabase.auth.getUser()).data.user.id;
 
-      // Fetch deliveries
       const { data: deliveries, error: deliveryError } = await supabase
         .from("deliveries")
         .select("*")
         .eq("user_id", userId);
       if (deliveryError) throw deliveryError;
+
+      const { data: move_request, error: move_requestError } = await supabase
+        .from("move_request")
+        .select("*")
+        .eq("user_id", userId);
+      if (move_requestError) throw move_requestError; // ✅
+
+
+
+      const normalize = (row, type) => ({
+      ...row,
+      orderType: type,
+      // unify the date used by the table & sorter
+      date: row.delivery_date || row.move_date || row.date,
+      // unify address fields if your schemas differ
+      from_address: row.from_address || row.pickup_address || row.from || row.origin || "-",
+      to_address: row.to_address || row.dropoff_address || row.to || row.destination || "-",
+      // remember source table for updates
+      _table: type === "Delivery" ? "deliveries" : "move_request",
+    });
 
       // Fetch vehicle bookings
     //   const { data: vehicles, error: vehicleError } = await supabase
@@ -27,13 +46,17 @@ export default function Orders() {
     //   if (vehicleError) throw vehicleError;
 
       // Merge both and add type for reference
+      // const allOrders = [
+      //   ...deliveries.map(d => ({ ...d, orderType: "Delivery" })),
+      //   ...move_request.map(m => ({ ...m, orderType: "Move Request" })) // ✅
+
+      // ];
       const allOrders = [
-        ...deliveries.map(d => ({ ...d, orderType: "Delivery" })),
-        //...vehicles.map(v => ({ ...v, orderType: "Vehicle Booking" }))
+        ...deliveries.map(d => normalize(d, "Delivery")),
+        ...move_request.map(m => normalize(m, "Move Request")),
       ];
 
-      // Sort by date (latest first)
-      allOrders.sort((a, b) => new Date(b.delivery_date || b.date) - new Date(a.delivery_date || a.date));
+      allOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
 
       setOrders(allOrders);
 
@@ -48,33 +71,34 @@ export default function Orders() {
   useEffect(() => {
     fetchOrders();
   }, []);
-
   const handleChangeStatus = async (order) => {
-    const confirmChange = window.confirm(
-      "Do you want to change the status to 'delivered'? This action cannot be undone."
-    );
-    if (!confirmChange) return;
+  const confirmChange = window.confirm(
+    "Do you want to change the status to 'delivered'? This action cannot be undone."
+  );
+  if (!confirmChange) return;
 
-    try {
-      let tableName = order.orderType === "Delivery" ? "deliveries" : "vehicle_bookings";
+  try {
+    const tableName =
+      order._table ||
+      (order.orderType === "Delivery" ? "deliveries" :
+       order.orderType === "Move Request" ? "move_request" :
+       "deliveries"); // fallback
 
-      const { error } = await supabase
-        .from(tableName)
-        .update({ status: "delivered" })
-        .eq("id", order.id);
+    const { error } = await supabase
+      .from(tableName)
+      .update({ status: "delivered" })
+      .eq("id", order.id);
 
-      if (error) throw error;
+    if (error) throw error;
 
-      // Update UI immediately
-      setOrders(prev => prev.map(o => o.id === order.id ? { ...o, status: "delivered" } : o));
+    setOrders(prev => prev.map(o => o.id === order.id ? { ...o, status: "delivered" } : o));
+    alert("Status updated successfully!");
+  } catch (err) {
+    console.error(err);
+    alert("Failed to update status. Check console for details.");
+  }
+};
 
-      alert("Status updated successfully!");
-
-    } catch (err) {
-      console.error(err);
-      alert("Failed to update status. Check console for details.");
-    }
-  };
 
   if (loading) return <p>Loading orders...</p>;
 
