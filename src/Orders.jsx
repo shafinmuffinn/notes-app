@@ -7,6 +7,21 @@ export default function Orders() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  function handleMakePayment(order) {
+  if (!order?.cost) {
+    alert('No payable amount found.');
+    return;
+  }
+  navigate('/payment', {
+    state: {
+      id: order.id,
+      table: order._table,
+      amount: order.cost,
+    },
+  });
+}
+
+
   const fetchOrders = async () => {
     setLoading(true);
     try {
@@ -125,6 +140,8 @@ export default function Orders() {
       <th style={{ border: "1px solid #ccc", padding: "8px", width: "16.66%", wordWrap: "break-word", textAlign: "center" }}>Date</th>
       <th style={{ border: "1px solid #ccc", padding: "8px", width: "16.66%", wordWrap: "break-word", textAlign: "center" }}>Status</th>
       <th style={{ border: "1px solid #ccc", padding: "8px", width: "16.66%", wordWrap: "break-word", textAlign: "center" }}>Action</th>
+      <th style={{ border: "1px solid #ccc", padding: "8px", width: "16.66%", wordWrap: "break-word", textAlign: "center" }}>Cost (Tk)</th>
+      <th style={{ border: "1px solid #ccc", padding: "8px", width: "16.66%", wordWrap: "break-word", textAlign: "center" }}>Payment</th>
     </tr>
   </thead>
   <tbody>
@@ -160,6 +177,19 @@ export default function Orders() {
       disabled>Confirmed</button>
           )}
         </td>
+      <td style={{ border: "1px solid #ccc", padding: "8px", wordWrap: "break-word", textAlign: "center" }}>{order.cost ?? "-"}</td>
+      <td style={{ border: "1px solid #ccc", padding: "8px", wordWrap: "break-word", textAlign: "center" }}>
+        {order.payment_status === "paid" ? (
+          <span style={{ color: "#2e7d32", fontWeight: 600 }}>Paid</span>
+        ) : (
+          <button
+            style={{ padding: "6px 12px", background: "#1976d2", color: "#fff", border: "none", borderRadius: 4, cursor: "pointer" }}
+            onClick={() => handleMakePayment(order)}
+          >
+            Make payment
+          </button>
+        )}
+      </td>
       </tr>
     ))}
   </tbody>

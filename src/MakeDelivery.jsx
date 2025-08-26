@@ -16,6 +16,7 @@ export default function MakeDelivery() {
   const [wrappingRequired, setWrappingRequired] = useState(false);
   const [customNote, setCustomNote] = useState("");
   const [parcelDescription, setParcelDescription] = useState("");
+  const [weight, setWeight] = useState(0);
   const [cost, setCost] = useState(0);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -25,10 +26,13 @@ export default function MakeDelivery() {
     "Barisal", "Rangpur", "Mymensingh", "Comilla", "Narsingdi"
   ];
 
-  const calculateCost = () => {
-    if (districtFrom && districtTo) {
-      setCost(districtFrom === districtTo ? 10 : 20);
-    }
+  const calculateCost = (from = districtFrom, to = districtTo, w = weight) => {
+  let baseCost = from && to ? (from === to ? 60 : 140) : 0;
+  let extra = 0;
+  if (w > 5) {
+  extra = Math.floor((w - 5) / 5) * 20;
+  }
+  setCost(baseCost + extra);
   };
 
   const handleSubmit = async (e) => {
@@ -51,6 +55,7 @@ export default function MakeDelivery() {
           district_to: districts.indexOf(districtTo) + 1,
           delivery_date: deliveryDate,
           cost: cost,
+          weight: weight
         }])
         .select()
         .single();
@@ -143,6 +148,12 @@ export default function MakeDelivery() {
     <div style={{ display: "flex", flexDirection: "column" }}>
       <label>Delivery Date</label>
       <input type="date" value={deliveryDate} onChange={(e) => setDeliveryDate(e.target.value)} />
+    </div>
+
+    {/* Weight */}
+    <div style={{ display: "flex", flexDirection: "column" }}>
+    <label>Weight (kg): {weight}</label>
+    <input type="range" min="0" max="100" step="1" value={weight} onChange={(e) => { setWeight(Number(e.target.value)); calculateCost(districtFrom, districtTo, Number(e.target.value)); }} />
     </div>
 
     {/* Time-Sensitive Fields */}

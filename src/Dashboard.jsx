@@ -8,6 +8,10 @@ export default function Dashboard() {
     navigate("/orders");
   };
 
+  const handleProfile = () => {
+    navigate("/update-profile")
+  };
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     navigate("/");
@@ -56,7 +60,7 @@ return (
       {/* Right: Profile, Orders, Logout */}
       <div style={{ display: "flex", gap: "12px"}}>
         <button
-          //onClick={handleProfile}
+          onClick={handleProfile}
           style={{ padding: "8px 16px", fontSize: "16px" }}
         >
           Profile

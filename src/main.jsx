@@ -8,6 +8,8 @@ import Dashboard from './Dashboard';
 import MakeDelivery from './MakeDelivery'
 import Orders from './Orders';
 import Move from './Move'
+import UpdateProfile from './UpdateProfile';
+import Payment from './Payment'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -21,6 +23,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/make-delivery" element={<MakeDelivery />} /> 
         <Route path="/orders" element={<Orders />} />
         <Route path="/move" element={<Move />} />
+        <Route path="/update-profile" element={<UpdateProfile />} />
+        <Route path="/payment" element={<Payment />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

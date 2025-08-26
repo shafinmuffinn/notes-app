@@ -11,10 +11,8 @@ console.log('app is running')
 
 function App() {
 
-  const [notes, setNotes] = useState([]);
   const [session, setSession] = useState(null);
-  const [newNote, setNewNote] = useState("");
-  const [saving, setSaving] = useState(false); 
+
   const navigate = useNavigate();
 
   useEffect(() => {
