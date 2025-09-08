@@ -10,6 +10,7 @@ import Orders from './Orders';
 import Move from './Move'
 import UpdateProfile from './UpdateProfile';
 import Payment from './Payment'
+import Admin from './Admin'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -25,6 +26,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/move" element={<Move />} />
         <Route path="/update-profile" element={<UpdateProfile />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/admin" element={<Admin />} />
+
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

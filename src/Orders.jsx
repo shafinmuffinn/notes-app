@@ -141,7 +141,8 @@ export default function Orders() {
       <th style={{ border: "1px solid #ccc", padding: "8px", width: "16.66%", wordWrap: "break-word", textAlign: "center" }}>Status</th>
       <th style={{ border: "1px solid #ccc", padding: "8px", width: "16.66%", wordWrap: "break-word", textAlign: "center" }}>Action</th>
       <th style={{ border: "1px solid #ccc", padding: "8px", width: "16.66%", wordWrap: "break-word", textAlign: "center" }}>Cost (Tk)</th>
-      <th style={{ border: "1px solid #ccc", padding: "8px", width: "16.66%", wordWrap: "break-word", textAlign: "center" }}>Payment</th>
+      <th style={{ border: "1px solid #ccc", padding: "8px", width: "16.66%", wordWrap: "break-word", textAlign: "center" }}>Paymentt</th>
+      <th style={{ border: "1px solid #ccc", padding: "8px", width: "16.66%", wordWrap: "break-word", textAlign: "center" }}>Track</th>
     </tr>
   </thead>
   <tbody>
@@ -189,6 +190,18 @@ export default function Orders() {
             Make payment
           </button>
         )}
+        
+      </td>
+      <td><button onClick={() => navigate('/track', {
+        state: {
+          table: order._table,        // 'deliveries' | 'move_request'
+          id: order.id,
+          pickup: { lat: order.pickup_lat, lng: order.pickup_lng },
+          dropoff: { lat: order.dropoff_lat, lng: order.dropoff_lng },
+        }
+      })}>
+        Track
+      </button>
       </td>
       </tr>
     ))}
