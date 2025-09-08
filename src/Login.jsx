@@ -33,8 +33,14 @@ function App() {
 
   useEffect(() => {
     if (session) {
-      navigate("/dashboard");
-    }})
+      // Check if the user is an admin and navigate accordingly
+      if (session.user.user_metadata?.role === "admin") {
+        navigate("/admin");  // Redirect to admin page if the user is an admin
+      } else {
+        navigate("/dashboard");  // Otherwise, go to the dashboard
+      }
+    }
+  }, [session, navigate]);
 
   if (!session) {
     return (
