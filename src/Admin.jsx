@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { supabase } from "./Login";  // Importing the existing supabase client
+import { supabase } from "./Login"; 
 
 function Admin() {
-  const [deliveries, setDeliveries] = useState([]);  // State to store deliveries
-  const [loading, setLoading] = useState(false); // Loading state
-  const [isAdmin, setIsAdmin] = useState(false); // State to check if the user is admin
+  const [deliveries, setDeliveries] = useState([]); 
+  const [loading, setLoading] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  // Check if the logged-in user is an admin
   useEffect(() => {
     const checkAdmin = async () => {
       const { data: { user }, error } = await supabase.auth.getUser();
@@ -14,38 +13,34 @@ function Admin() {
         console.log("Error fetching user:", error.message);
         return;
       }
-
-      // Check if the user has the 'admin' role in user_metadata
       if (user && user.user_metadata?.role === "admin") {
-        setIsAdmin(true); // Grant access if the user is an admin
+        setIsAdmin(true);
       } else {
-        setIsAdmin(false); // Deny access for non-admin users
+        setIsAdmin(false);
       }
     };
-
     checkAdmin();
   }, []);
 
-  // Fetch all deliveries (only for admins)
   useEffect(() => {
     const fetchDeliveries = async () => {
       if (isAdmin) {
         setLoading(true);
         try {
-          // Fetch all deliveries from the 'deliveries' table
+
           const { data, error } = await supabase
-            .from("deliveries")  // Assuming the deliveries table holds the delivery information
+            .from("deliveries")
             .select("*");
 
           if (error) {
             console.log("Error fetching deliveries:", error.message);
           } else {
-            setDeliveries(data); // Set deliveries for the admin view
+            setDeliveries(data);
           }
         } catch (error) {
           console.log("Error fetching deliveries:", error.message);
         } finally {
-          setLoading(false); // Stop loading once the data is fetched
+          setLoading(false);
         }
       }
     };
